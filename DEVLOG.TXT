@@ -1,0 +1,4 @@
+Current problem, positioning cursor. 
+For that , visually, we want to use the and index number, to select the character of the current line, and paint it with 
+a different color. Problem is, since the local cursos index also accounts for the lines as a character alone, if we use that number,
+it might not color the correct character.
