@@ -43,6 +43,8 @@
 }
 
 .line{
+    display: flex;
+    flex-direction: row;
     font-family: monospace;
     font-size: 25px;
     width: 100%;
@@ -70,4 +72,9 @@
     height: 100%;
     width: 10px;
     background-color: aquamarine;
+}
+
+#cursorHolder{
+    background-color: aqua;
+    width: fit-content;
 }

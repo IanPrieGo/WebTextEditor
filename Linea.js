@@ -17,13 +17,15 @@ class Line{
 
     toHTML(){
         let finalContent = this.content;
-        let mod;
+        let mod = "";
 
         if (lineCurrentIndex == this.position){
             mod = `id="currentLine"`;
         }
 
-        // if ()
+        if (this.position == lineCurrentIndex){
+            finalContent+= `<div class="ghostChar" id="cursorHolder">☓</div>`
+        }
 
         return `<div class="line" ${mod}> ${finalContent}  </div>`
     }

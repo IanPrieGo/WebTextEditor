@@ -5,9 +5,10 @@ let EditorContent;
 let lines = [];
 let lineCurrentIndex = -1;
 let Label1;
-let globalCursorPosition = 0;
-let localCursorPosition = 0
+let globalCursorPosition = 1;
+let localCursorPosition = 1;
 let Cursor;
+let totalLines
 
 
 document.addEventListener("DOMContentLoaded", (e) => {
@@ -23,8 +24,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
         if (line instanceof Line)EditorContent.innerHTML += line.toHTML();
     }
 
-    globalCursorPosition = getTotalLinesSize();
-    localCursorPosition = getTotalLinesSize();
+    globalCursorPosition = getTotalLinesSize() + 1;
+    localCursorPosition = getTotalLinesSize() + 1;
 
     let elements = [
             "<p>Current line index: " + lineCurrentIndex + "</p>",
@@ -66,11 +67,11 @@ function clickOnEditor(e){
 
 
 document.addEventListener("keydown", (e) => {
-    e.preventDefault();
     // if ((e.key <= 'z' && e.key >= 'a')||(e.key <= 'Z' && e.key >= 'A'))console.log("Letra!");
-    console.log(e.key);
+    console.log(e.key, e);
     
     if(editorIsSelected){
+        e.preventDefault();
         EditorContent.innerHTML = '';
         switch(e.key){
             case "Enter":
@@ -93,7 +94,10 @@ document.addEventListener("keydown", (e) => {
                 // moveCursor(e.key);
                 break;
             case "Tab":
-
+                write("   ")
+                break;
+            case " ":
+                write(" ")
                 break;
             default:
                 console.log(lines,lineCurrentIndex, lines.length );
@@ -107,6 +111,7 @@ document.addEventListener("keydown", (e) => {
             if (line instanceof Line)EditorContent.innerHTML += line.toHTML();
             console.log(line)
         }
+
 
         let elements = [
             "<p>Current line index: " + lineCurrentIndex + "</p>",
