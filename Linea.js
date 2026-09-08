@@ -7,14 +7,14 @@ class Line{
         }
     }
 
-    addChars(){
-
+    updatePosition(newPos){
+        this.position =  newPos;
     }
 
     getSize(){
         return this.content.length
     }
-
+    
     toHTML(){
         let finalContent = this.content;
         let mod = "";
@@ -24,7 +24,7 @@ class Line{
         }
 
         if (this.position == lineCurrentIndex){
-            finalContent+= `<div class="ghostChar" id="cursorHolder">☓</div>`
+            finalContent+= `<div class="ghostChar" id="cursorHolder">[]</div>`
         }
 
         return `<div class="line" ${mod}> ${finalContent}  </div>`

@@ -1,37 +1,40 @@
-
-let editorIsSelected = false;
 let Editor;
 let EditorContent;
-let lines = [];
-let lineCurrentIndex = -1;
 let Label1;
+let NumsColumn;
+
+let editorIsSelected = false;
+let lines = [];
+
+let lineCurrentIndex = -1;
 let globalCursorPosition = 1;
 let localCursorPosition = 1;
-let Cursor;
-let totalLines
 
 
 document.addEventListener("DOMContentLoaded", (e) => {
     Label1 = document.getElementById("label1");
     Editor = document.getElementById("editor");    
     EditorContent = document.getElementById("linesColumn");
+    NumsColumn = document.getElementById("numsColumn");
+
     console.log(EditorContent);
 
-    addLine("Hola :D");
+    addLine("Falta añadir mejores controles para el cursor, y mejor sistema para localizar en el editor");
+
     console.log(lines)
 
-    for(let line of lines){
-        if (line instanceof Line)EditorContent.innerHTML += line.toHTML();
-    }
+    updateEditor();
 
-    globalCursorPosition = getTotalLinesSize() + 1;
-    localCursorPosition = getTotalLinesSize() + 1;
+    globalCursorPosition = getTotalLinesSize();
+    localCursorPosition = getTotalLinesSize();
+
+    initCursorPosition();
 
     let elements = [
             "<p>Current line index: " + lineCurrentIndex + "</p>",
             "<p>Current Lines: " + lines.length + "</p>",
-            "<p>GLOBAL Cursos Position: " + globalCursorPosition +"</p>",
-            "<p>LOCAL Cursos Position: " + localCursorPosition +"</p>"
+            "<p>GLOBAL Cursor Position: " + globalCursorPosition +"</p>",
+            "<p>LOCAL Cursor Position: " + localCursorPosition +"</p>"
         ]
     Label1.innerHTML=elements.join("");
     for (let line of lines){
@@ -64,19 +67,24 @@ function clickOnEditor(e){
     )
 }
 
-
+// navigator.clipboard.readText().
+//     then((e)=>{
+//         console.log("xd", e);
+//     });
 
 document.addEventListener("keydown", (e) => {
     // if ((e.key <= 'z' && e.key >= 'a')||(e.key <= 'Z' && e.key >= 'A'))console.log("Letra!");
     console.log(e.key, e);
     
+    e.preventDefault();
+    
     if(editorIsSelected){
-        e.preventDefault();
+        
         EditorContent.innerHTML = '';
+        NumsColumn.innerHTML = '';
         switch(e.key){
             case "Enter":
                 addLine()
-                // Add line
                 break;
             case "Backspace":
                 erase()
@@ -91,7 +99,7 @@ document.addEventListener("keydown", (e) => {
             case "ArrowRight":
             case "ArrowUp":
             case "ArrowDown":
-                // moveCursor(e.key);
+                moveCursor(e.key);
                 break;
             case "Tab":
                 write("   ")
@@ -100,24 +108,20 @@ document.addEventListener("keydown", (e) => {
                 write(" ")
                 break;
             default:
-                console.log(lines,lineCurrentIndex, lines.length );
                 write(e.key)
-                // lines[lineCurrentIndex].content+=e.key
-                // globalCursorPosition++
+
                 break;
         }
 
-        for(line of lines){
-            if (line instanceof Line)EditorContent.innerHTML += line.toHTML();
-            console.log(line)
-        }
+        
+        updateEditor();
 
 
         let elements = [
             "<p>Current line index: " + lineCurrentIndex + "</p>",
             "<p>Current Lines: " + lines.length + "</p>",
-            "<p>GLOBAL Cursos Position: " + globalCursorPosition +"</p>",
-            "<p>LOCAL Cursos Position: " + localCursorPosition +"</p>"
+            "<p>GLOBAL Cursor Position: " + globalCursorPosition +"</p>",
+            "<p>LOCAL Cursor Position: " + localCursorPosition +"</p>"
         ]
         Label1.innerHTML=elements.join("");
         for (let line of lines){
@@ -127,5 +131,18 @@ document.addEventListener("keydown", (e) => {
     }
 
 });
+
+
+function updateEditor(){
+       let i = 0;
+        for(line of lines){
+            line.updatePosition(i);
+            if (line instanceof Line){
+                EditorContent.innerHTML += line.toHTML();
+                NumsColumn.innerHTML += `<p class="number">${i}</p>`
+            }
+            i++;
+        }
+}
 
 

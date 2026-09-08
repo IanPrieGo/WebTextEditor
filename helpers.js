@@ -1,16 +1,28 @@
 function addLine(content){
     localCursorPosition = 0;
     let Content = (content == undefined) ? "" : content
+    
+    lines.splice(lineCurrentIndex+1, 0, new Line(lineCurrentIndex, Content));
+
     lineCurrentIndex++
-    lines.push(new Line(lineCurrentIndex, Content))
-    globalCursorPosition++;
-    localCursorPosition++;
+    // globalCursorPosition++;
+    // localCursorPosition++;
+}
+
+function removeLine(){
+
+    lines.splice(lineCurrentIndex, 1);
+
+    lineCurrentIndex--;
+    // globalCursorPosition--;
+    // localCursorPosition--;
+
 }
 
 function write(chars, position){
     lines[lineCurrentIndex].content+=chars
-    globalCursorPosition++
-    localCursorPosition++;
+    globalCursorPosition += chars.length
+    localCursorPosition+= chars.length
 }
 
 function erase(chars, start, end){
@@ -19,8 +31,7 @@ function erase(chars, start, end){
 
     let lineContent = lines[lineCurrentIndex].content;
     if (lines[lineCurrentIndex].content.length < 1){
-        lines.pop();
-        lineCurrentIndex--;
+        removeLine();
         localCursorPosition = lines[lineCurrentIndex].content.length;
         console.log("Line Erased Succesfully");
     } else {
@@ -29,25 +40,27 @@ function erase(chars, start, end){
     }
     globalCursorPosition--;
     
-    
-    
 }
 
-function getCursorPosition(){
-    return null;
+function initCursorPosition(){
+
 }
 
 function moveCursor(direction){
-    cursorX+=10;
+    // if ((lineCurrentIndex + moveY) > -1) return;
+    // if (lines.length < (lineCurrentIndex + moveY)) return;
+    let moveX = (direction == "ArrowRight") - (direction == "ArrowLeft");
+    let moveY = (direction == "ArrowDown") - (direction == "ArrowUp");
 
-    // let moveX = (direction == "ArrowRight") - (direction == "ArrowLeft");
-    // let moveY = (direction == "ArrowDown") - (direction == "ArrowUp");
-    // cursorX += moveX;
-    // cursorY += moveY;
-
-    Cursor.style = "left: "+ cursorX + "px;";
-
-    console.log(Cursor.style);
+    if (lines.length > (lineCurrentIndex + moveY) && (lineCurrentIndex + moveY) > -1){
+        globalCursorPosition += (lines[lineCurrentIndex].content.length) * moveY;
+        lineCurrentIndex += moveY;
+        localCursorPosition = lines[lineCurrentIndex].content.length;
+    } else {
+        console.log(lines.length,lineCurrentIndex + moveY,  lines.length < (lineCurrentIndex + moveY));
+    }
+    
+    
 }
 
 
